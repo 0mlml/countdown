@@ -49,7 +49,7 @@ Game new_game(int small_count, int large_count)
     small_count = 6 - large_count;
   }
 
-  Game game = {};
+  Game game = {0};
 
   game.target = gen_target();
 
@@ -70,17 +70,17 @@ Game new_game(int small_count, int large_count)
   return game;
 }
 
-int score_solution(int solution, Game game)
+int score_solution(int solution, int target)
 {
-  if (game.target - solution == 0)
+  if (target - solution == 0)
   {
     return 10;
   }
-  else if (abs(game.target - solution) <= 5)
+  else if (abs(target - solution) <= 5)
   {
     return 7;
   }
-  else if (abs(game.target - solution) <= 10)
+  else if (abs(target - solution) <= 10)
   {
     return 5;
   }

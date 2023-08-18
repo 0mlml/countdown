@@ -31,4 +31,4 @@ Game new_game(int small_count, int large_count);
 // Print a game
 void print_game(Game game);
 // Score a solution number
-int score_solution(int solution, Game game);
+int score_solution(int solution, int target);
