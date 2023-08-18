@@ -1,0 +1,23 @@
+{
+  "name": "countdown",
+  "version": "1.0.0",
+  "description": "Solver for the numbers game in the british tv show countdown",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "cd test && sh test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0mlml/countdown.git#node.js"
+  },
+  "author": "0mlml",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/0mlml/countdown/issues"
+  },
+  "homepage": "https://github.com/0mlml/countdown/tree/node.js#readme"
+}

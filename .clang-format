@@ -1,7 +1,0 @@
-AccessModifierOffset: -4
-BasedOnStyle: LLVM
-BreakBeforeBraces: Allman
-ColumnLimit: 0
-IndentWidth: 2
-NamespaceIndentation: All
-Standard: Cpp11
