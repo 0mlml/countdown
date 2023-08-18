@@ -88,6 +88,70 @@ Game new_game(int small_count, int large_count)
   return game;
 }
 
+Game new_set_game(int target, int *nums, int should_validate)
+{
+  if (!should_validate)
+  {
+    Game game = {0};
+    game.target = target;
+    game.small_count = 6;
+    memcpy(game.small, nums, sizeof(int) * 6);
+    return game;
+  }
+
+  if (target < 100 || target > 999)
+  {
+    printf("Invalid set game (invalid target). Append s to the target to skip validation.\n");
+    return (Game){0};
+  }
+
+  int small_count = 0;
+  int large_count = 0;
+
+  int small_numbers[10] = {0};
+
+  for (int i = 0; i < 6; i++)
+  {
+    if (nums[i] <= 10)
+    {
+      if (small_numbers[nums[i]] >= 2)
+      {
+        printf("Invalid set game (3rd duplicate small number). Append s to the target to skip validation.\n");
+        return (Game){0};
+      }
+      small_count++;
+      small_numbers[nums[i]]++;
+      continue;
+    }
+
+    if (large_count >= 4)
+    {
+      printf("Invalid set game (5th large number). Append s to the target to skip validation.\n");
+      return (Game){0};
+    }
+
+    if (nums[i] != 25 && nums[i] != 50 && nums[i] != 75 && nums[i] != 100)
+    {
+      printf("Invalid set game (invalid large number). Append s to the target to skip validation.\n");
+      return (Game){0};
+    }
+
+    large_count++;
+  }
+
+  if (small_count != 6 - large_count)
+  {
+    printf("Invalid set game (wrong number of small numbers). Append s to the target to skip validation.\n");
+    return (Game){0};
+  }
+
+  Game game = {0};
+  game.target = target;
+  memcpy(game.small, nums, sizeof(int) * 6);
+  game.small_count = 6;
+  return game;
+}
+
 int score_solution(int solution, int target)
 {
   if (target - solution == 0)

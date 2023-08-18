@@ -126,7 +126,13 @@ SolutionList solve(Game game)
   solution.score = 1000000;
   solution.target = game.target;
 
-  int combined_numbers[6];
+  int* combined_numbers = malloc(6 * sizeof(int));
+  if (combined_numbers == NULL)
+  {
+    printf("Failed to allocate memory for combined_numbers\n");
+    exit(1);
+  }
+
   memcpy(combined_numbers, game.small, game.small_count * sizeof(int));
   memcpy(combined_numbers + game.small_count, game.large, game.large_count * sizeof(int));
 
@@ -152,6 +158,8 @@ SolutionList solve(Game game)
       solution = new_solution;
     }
   }
+
+  free(combined_numbers);
 
   if (found_solution_count <= 0 && score_solution(solution.current_value, solution.target) > 0)
   {

@@ -28,6 +28,8 @@ int gen_target();
 
 // Generate a new game
 Game new_game(int small_count, int large_count);
+// Generate a new set game. All numbers are copied to the 'small' array.
+Game new_set_game(int target, int *nums, int should_validate);
 // Print a game
 void print_game(Game game);
 // Score a solution number
