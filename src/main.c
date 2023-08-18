@@ -5,7 +5,7 @@
 
 int generate_large_count()
 {
-  return (rand() % 4) + 1;
+  return (rand() % 5);
 }
 
 int main(int argc, char *argv[])
