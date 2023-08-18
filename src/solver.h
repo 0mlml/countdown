@@ -31,7 +31,7 @@ typedef struct
 // Try to solve a game
 SolutionList solve(Game game);
 
-// Convert an operation to a string
-char operation_to_string(Operation operation);
+// Prune duplicate solutions
+void prune_duplicates(SolutionList *list);
 // Print a solution
 void print_solution(Solution solution);

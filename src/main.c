@@ -31,15 +31,19 @@ int main(int argc, char *argv[])
 
     game = new_game(small_count, large_count);
 
-    printf("New game: \n");
+    printf("info: New game: \n");
 
     print_game(game);
 
     solution = solve(game);
 
-    printf("Found: %d\n", solution.count);
-    printf("1st Solution: \n");
-    print_solution(solution.found[0]);
+    prune_duplicates(&solution);
+
+    printf("info: Found: %d\n", solution.count);
+    for (int i = 0; i < solution.count; i++)
+    {
+      print_solution(solution.found[i]);
+    }
   }
 
   return 0;

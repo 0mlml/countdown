@@ -16,35 +16,15 @@ void evaluate_solution(Solution *solution)
     switch (solution->operations[i])
     {
     case ADD:
-      if (value > INT_MAX - solution->numbers[i + 1])
-      {
-        solution->score = 1000000;
-        return;
-      }
       value += solution->numbers[i + 1];
       break;
     case SUBTRACT:
-      if (value < INT_MIN + solution->numbers[i + 1])
-      {
-        solution->score = 1000000;
-        return;
-      }
       value -= solution->numbers[i + 1];
       break;
     case MULTIPLY:
-      if (solution->numbers[i + 1] != 0 && (value > INT_MAX / solution->numbers[i + 1] || value < INT_MIN / solution->numbers[i + 1]))
-      {
-        solution->score = 1000000;
-        return;
-      }
       value *= solution->numbers[i + 1];
       break;
     case DIVIDE:
-      if (solution->numbers[i + 1] == 0)
-      {
-        solution->score = 1000000;
-        return;
-      }
       value /= solution->numbers[i + 1];
       break;
     case UNKNOWN:
@@ -82,14 +62,8 @@ Solution search(int *nums_left, int nums_count, Solution last)
 
       Solution solution = last;
 
-      if (solution.num_count >= 6)
+      if (solution.num_count == 6 || solution.op_count == 5)
       {
-        // printf("ERROR: Exceeding numbers array bounds.\n");
-        return best;
-      }
-      if (solution.op_count >= 5)
-      {
-        // printf("ERROR: Exceeding operations array bounds.\n");
         return best;
       }
 
@@ -113,7 +87,13 @@ Solution search(int *nums_left, int nums_count, Solution last)
         }
       }
 
-      int next_nums_left[nums_count - 1];
+      int *next_nums_left = malloc((nums_count - 1) * sizeof(int));
+      if (next_nums_left == NULL)
+      {
+        printf("Failed to allocate memory for next_nums_left\n");
+        exit(1);
+      }
+
       int k = 0;
       for (int j = 0; j < nums_count; j++)
       {
@@ -124,6 +104,8 @@ Solution search(int *nums_left, int nums_count, Solution last)
       }
 
       Solution recursive_solution = search(next_nums_left, nums_count - 1, solution);
+
+      free(next_nums_left);
 
       if (recursive_solution.score < best.score)
       {
@@ -179,6 +161,54 @@ SolutionList solve(Game game)
   return (SolutionList){found_solution, found_solution_count};
 }
 
+int are_solutions_equal(Solution *a, Solution *b)
+{
+  if (a->current_value != b->current_value)
+  {
+    return 0;
+  }
+
+  for (int i = 0; i < 6; i++)
+  {
+    if (a->numbers[i] != b->numbers[i])
+    {
+      return 0;
+    }
+  }
+
+  for (int i = 0; i < 5; i++)
+  {
+    if (a->operations[i] != b->operations[i])
+    {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+void prune_duplicates(SolutionList *list)
+{
+  for (int i = 0; i < list->count; i++)
+  {
+    for (int j = i + 1; j < list->count;)
+    {
+      if (are_solutions_equal(&list->found[i], &list->found[j]))
+      {
+        for (int k = j; k < list->count - 1; k++)
+        {
+          list->found[k] = list->found[k + 1];
+        }
+        list->count--;
+      }
+      else
+      {
+        j++;
+      }
+    }
+  }
+}
+
 char operation_to_string(Operation operation)
 {
   switch (operation)
@@ -198,39 +228,55 @@ char operation_to_string(Operation operation)
 
 void print_solution(Solution solution)
 {
-  printf("%d ", solution.numbers[0]);
-  int running_value = solution.numbers[0];
-
-  for (int i = 0; i < solution.op_count; i++)
+  if (solution.op_count == 0 || solution.num_count == 0)
   {
-    char op = operation_to_string(solution.operations[i]);
-    int current_number = solution.numbers[i + 1];
-
-    switch (solution.operations[i])
-    {
-    case ADD:
-      running_value += current_number;
-      printf("%c %d ", op, current_number);
-      break;
-    case SUBTRACT:
-      running_value -= current_number;
-      printf("%c %d ", op, current_number);
-      break;
-    case MULTIPLY:
-      printf("= %d\n", running_value);
-      printf("%d %c %d ", running_value, op, current_number);
-      running_value *= current_number;
-      break;
-    case DIVIDE:
-      printf("= %d\n", running_value);
-      printf("%d %c %d ", running_value, op, current_number);
-      running_value /= current_number;
-      break;
-    case UNKNOWN:
-    default:
-      continue;
-    }
+    printf("Solution is invalid\n");
+    return;
   }
 
-  printf("= %d\n", solution.current_value);
+  int need_parenthesis = 0;
+  if (solution.operations[0] == ADD || solution.operations[0] == SUBTRACT)
+  {
+    need_parenthesis = 1;
+  }
+
+  if (need_parenthesis)
+  {
+    printf("(");
+  }
+
+  int num_index = 0;
+  int op_index = 0;
+  while (op_index < solution.op_count && num_index < solution.num_count)
+  {
+    printf("%d", solution.numbers[num_index++]);
+    if (!solution.numbers[num_index])
+    {
+      break;
+    }
+    char op_char = operation_to_string(solution.operations[op_index]);
+    if ((op_char == '*' || op_char == '/') && need_parenthesis)
+    {
+      printf(") %c ", op_char);
+      need_parenthesis = 0;
+    }
+    else
+    {
+      printf(" %c ", op_char);
+    }
+    op_index++;
+  }
+
+  if (num_index < solution.num_count)
+  {
+    printf("%d", solution.numbers[num_index]);
+  }
+
+  if (need_parenthesis)
+  {
+
+    printf(")");
+  }
+
+  printf(" = %d\n", solution.current_value);
 }

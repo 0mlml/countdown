@@ -108,8 +108,8 @@ int score_solution(int solution, int target)
 
 void print_game(Game game)
 {
-  printf("Target: %d\n", game.target);
-  printf("Numbers: ");
+  printf("info: Target: %d\n", game.target);
+  printf("info: Numbers: ");
   for (int i = 0; i < game.small_count; i++)
   {
     printf("%d ", game.small[i]);
