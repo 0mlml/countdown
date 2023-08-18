@@ -57,11 +57,16 @@ void evaluate_solution(Solution *solution)
   solution->score = abs(solution->target - value);
 }
 
+#define MAX_SOLUTIONS 100
+
+Solution *found_solution;
+int found_solution_count;
+
 Solution search(int *nums_left, int nums_count, Solution last)
 {
   Solution best = last;
 
-  if (nums_count == 0 || best.score == 0)
+  if (nums_count <= 0 || best.score == 0)
   {
     return best;
   }
@@ -77,6 +82,17 @@ Solution search(int *nums_left, int nums_count, Solution last)
 
       Solution solution = last;
 
+      if (solution.num_count >= 6)
+      {
+        // printf("ERROR: Exceeding numbers array bounds.\n");
+        return best;
+      }
+      if (solution.op_count >= 5)
+      {
+        // printf("ERROR: Exceeding operations array bounds.\n");
+        return best;
+      }
+
       solution.numbers[solution.num_count] = nums_left[num_index];
       solution.num_count++;
       solution.operations[solution.op_count] = op_index;
@@ -89,7 +105,11 @@ Solution search(int *nums_left, int nums_count, Solution last)
         best = solution;
         if (best.score == 0)
         {
-          return best;
+          if (found_solution_count <= MAX_SOLUTIONS)
+          {
+            found_solution[found_solution_count++] = best;
+            return best;
+          }
         }
       }
 
@@ -115,16 +135,21 @@ Solution search(int *nums_left, int nums_count, Solution last)
   return best;
 }
 
-Solution solve(Game game)
+SolutionList solve(Game game)
 {
   Solution solution = {0};
+  solution.current_value = 0;
+  solution.num_count = 0;
+  solution.op_count = 0;
   solution.score = 1000000;
   solution.target = game.target;
-  solution.current_value = 0;
 
   int combined_numbers[6];
   memcpy(combined_numbers, game.small, game.small_count * sizeof(int));
   memcpy(combined_numbers + game.small_count, game.large, game.large_count * sizeof(int));
+
+  found_solution = malloc(sizeof(Solution) * MAX_SOLUTIONS);
+  found_solution_count = 0;
 
   for (int i = 0; i < 6; i++)
   {
@@ -146,7 +171,12 @@ Solution solve(Game game)
     }
   }
 
-  return solution;
+  if (found_solution_count <= 0 && score_solution(solution.current_value, solution.target) > 0)
+  {
+    found_solution[found_solution_count++] = solution;
+  }
+
+  return (SolutionList){found_solution, found_solution_count};
 }
 
 char operation_to_string(Operation operation)

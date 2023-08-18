@@ -22,8 +22,14 @@ typedef struct
   Operation operations[5];
 } Solution;
 
+typedef struct
+{
+  Solution *found;
+  int count;
+} SolutionList;
+
 // Try to solve a game
-Solution solve(Game game);
+SolutionList solve(Game game);
 
 // Convert an operation to a string
 char operation_to_string(Operation operation);

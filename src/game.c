@@ -11,25 +11,35 @@ void shuffle(int *array, int size)
   }
 }
 
+int small_numbers[10];
+
+void reset_small()
+{
+  for (int i = 0; i < 10; i++)
+  {
+    small_numbers[i] = 0;
+  }
+}
+
 int gen_small()
 {
   return (rand() % 10) + 1;
 }
 
-const int numbers_def[] = {25, 50, 75, 100};
-int numbers[4];
-int numbers_index;
+const int large_numbers_def[] = {25, 50, 75, 100};
+int large_numbers[4];
+int large_numbers_index;
 
 void shuffle_large()
 {
-  memcpy(numbers, numbers_def, sizeof(numbers_def));
-  shuffle(numbers, 4);
-  numbers_index = 0;
+  memcpy(large_numbers, large_numbers_def, sizeof(large_numbers_def));
+  shuffle(large_numbers, 4);
+  large_numbers_index = 0;
 }
 
 int gen_large()
 {
-  return numbers[numbers_index++];
+  return large_numbers[large_numbers_index++];
 }
 
 int gen_target()
@@ -53,10 +63,18 @@ Game new_game(int small_count, int large_count)
 
   game.target = gen_target();
 
+  reset_small();
+
   game.small_count = small_count;
   for (int i = 0; i < small_count; i++)
   {
-    game.small[i] = gen_small();
+    int num = gen_small();
+    while (small_numbers[num] >= 2)
+    {
+      num = gen_small();
+    }
+    small_numbers[num]++;
+    game.small[i] = num;
   }
 
   shuffle_large();

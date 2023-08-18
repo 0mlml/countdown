@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     runs_count = DEFAULT_RUNS_COUNT;
   }
   Game game;
-  Solution solution;
+  SolutionList solution;
   for (int run_index = 0; run_index < runs_count; run_index++)
   {
     int large_count = generate_large_count();
@@ -37,8 +37,9 @@ int main(int argc, char *argv[])
 
     solution = solve(game);
 
-    printf("Solution: \n");
-    print_solution(solution);
+    printf("Found: %d\n", solution.count);
+    printf("1st Solution: \n");
+    print_solution(solution.found[0]);
   }
 
   return 0;
