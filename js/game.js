@@ -91,7 +91,6 @@ class Expression {
 
   push(item) {
     if (this.sequence.length % 2 === 0 && typeof item != 'number') {
-      console.log('hi :D')
       throw new Error(`Invalid push to sequence (even index not a number)\nitem: ${item}\nseq: ${this.sequence}`);
     }
 
@@ -113,7 +112,6 @@ class Expression {
     }
 
     if (this.sequence.length % 2 === 0) {
-      console.log('breakpoint :D')
       throw new Error('Evaluating sequence ending with operator (even length)');
     }
 
@@ -180,7 +178,7 @@ class Expression {
       result = `(${result} ${operator.toString()} ${nextNumber})`;
     }
 
-    return `info: seq: ${this.sequence}\n${result.substring(1, result.length - 1)} = ${this.value}`;
+    return `${result.substring(1, result.length - 1)} = ${this.value}`;
   }
 
 }

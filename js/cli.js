@@ -6,7 +6,7 @@ function generateLargeCount() {
   return Math.floor(Math.random() * 5);
 }
 
-(() => {
+function play() {
   const randomLargeCount = generateLargeCount();
   const game = new Game(6 - randomLargeCount, randomLargeCount);
 
@@ -23,4 +23,11 @@ function generateLargeCount() {
     console.log(solution.toString());
   }
 
+}
+
+(() => {
+  const times = parseInt(process.argv[2]) || 1;
+  for (let i = 0; i < times; i++) {
+    play();
+  }
 })();
