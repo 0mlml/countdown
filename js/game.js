@@ -1,3 +1,5 @@
+const isNode = window === undefined && module !== undefined;
+
 class Operator {
   static Add = '+';
   static Subtract = '-';
@@ -64,6 +66,10 @@ class Operator {
 
   copy() {
     return new Operator(this.operator);
+  }
+
+  equals(other) {
+    return this.operator === other.operator;
   }
 }
 
@@ -153,7 +159,9 @@ class Expression {
     }
 
     for (let i = 0; i < this.sequence.length; i++) {
-      if (this.sequence[i] !== other.sequence[i]) {
+      if (this.sequence[i] instanceof Operator && !this.sequence[i].equals(other.sequence[i])) {
+        return false;
+      } else if (this.sequence[i] !== other.sequence[i]) {
         return false;
       }
     }
@@ -286,7 +294,11 @@ class Game {
   }
 
   toString() {
-    return `info: Target: ${this.target}\ninfo: Numbers: ${this.numbers}`;
+    if (isNode) {
+      return `info: Target: ${this.target}\ninfo: Numbers: ${this.numbers}`;
+    } else {
+      return `Target: ${this.target}\nNumbers: ${this.numbers}`;
+    }
   }
 
   get small() {
@@ -342,8 +354,10 @@ class Game {
   }
 }
 
-module.exports = {
-  Game,
-  Operator,
-  Expression
-};
+if (isNode) {
+  module.exports = {
+    Game,
+    Operator,
+    Expression
+  };
+}

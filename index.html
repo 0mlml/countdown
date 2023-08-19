@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <script src="js/game.js"></script>
+  <script src="js/solver.js"></script>
+  <script defer src="js/script.js"></script>
+  <title>Countdown</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Countdown Numbers Game</h1>
+    <div class="flexcol">
+      <div class="settings">
+        <label>
+          Large Numbers:
+          <input type="number" id="largeNumbers" min="0" max="4" value="2">
+        </label>
+        <label>
+          Small Numbers:
+          <input type="number" id="smallNumbers" min="0" max="6" value="4">
+        </label>
+        <button id="generateNumbers">Generate Numbers</button>
+      </div>
+      <span id="generateNumbersError" style="color:red;"></span>
+    </div>
+
+    <div class="flexcol">
+      <textarea id="targetNumber" placeholder="target"></textarea>
+      <span id="targetNumberError" style="color:red;"></span>
+      <textarea id="providedNumbers" placeholder="numbers"></textarea>
+      <span id="providedNumbersError" style="color:red;"></span>
+      <button id="startSolve">Solve</button>
+    </div>
+
+    <div class="flexcol">
+      <h2>Solver Output:</h2>
+      <textarea id="solverOutput" placeholder="solver will print here..." readonly></textarea>
+    </div>
+  </div>
+  <footer>
+    <a href="https://github.com/0mlml/countdown/tree/js">Source</a>
+  </footer>
+</body>
+
+
+</html>

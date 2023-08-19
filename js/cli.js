@@ -1,13 +1,12 @@
 // Node CLI entry point
-const { Game } = require('./game.js');
-const { solve } = require('./solver.js');
 
-function generateLargeCount() {
-  return Math.floor(Math.random() * 5);
+if (window === undefined && module !== undefined) {
+  const { Game } = require('./game.js');
+  const { solve } = require('./solver.js');
 }
 
 function play() {
-  const randomLargeCount = generateLargeCount();
+  const randomLargeCount = Math.floor(Math.random() * 5);
   const game = new Game(6 - randomLargeCount, randomLargeCount);
 
   console.log('info: New game:');
